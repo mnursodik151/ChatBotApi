@@ -27,7 +27,7 @@ namespace ChatBotApi.Controllers
 
         // POST: api/Home
         [HttpPost]
-        public IActionResult Post([FromBody] string value)
+        public IActionResult Post([FromBody] TelegramMessage value)
         {
             return Ok(value);
         }
