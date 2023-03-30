@@ -1,9 +1,9 @@
-public class ObservableUnsubscriber<T> : IDisposable
+public class ObservableUnsubscriberUtil<T> : IDisposable
 {
     private readonly List<IObserver<T>> _observers;
     private readonly IObserver<T> _observer;
 
-    public ObservableUnsubscriber(List<IObserver<T>> observers, IObserver<T> observer)
+    public ObservableUnsubscriberUtil(List<IObserver<T>> observers, IObserver<T> observer)
     {
         _observers = observers;
         _observer = observer;

@@ -7,9 +7,7 @@ public class OpenAiApiService : IOpenAiApiService
     private readonly OpenAiCompletionObservable _openAiCompletionObservable;
     private readonly OpenAIAPI _openAiApi;
 
-    public OpenAiApiService(IConfiguration configuration, 
-    IObservable<CompletionResult> openAiCompletionObservable, 
-    IObserver<CompletionResult> openAiCompletionObserver)
+    public OpenAiApiService(IConfiguration configuration, IObservable<CompletionResult> openAiCompletionObservable)
     {
         _openAiApiToken = configuration["OpenAiAPIKey"];
         _openAiApi = new OpenAIAPI(_openAiApiToken);
