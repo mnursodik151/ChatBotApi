@@ -27,13 +27,17 @@ public class TelegramMessageService : ITelegramMessageService
         var json = JsonConvert.SerializeObject(request);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var httpResponse = await _httpClient.PostAsync($"bot{_telegramBotToken}/sendMessage", content);
+        var httpResponse = await _httpClient.PostAsync(new UriBuilder()
+        {
+            Scheme = _httpClient.BaseAddress?.ToString(),
+            Path = $"bot{_telegramBotToken}/sendMessage"
+        }.Uri, content);
         httpResponse.EnsureSuccessStatusCode();
 
         var responseJson = await httpResponse.Content.ReadAsStringAsync();
         var sendMessageResponse = JsonConvert.DeserializeObject<TelegramSendMessageResponseDto>(responseJson, _jsonSerializerSettings);
 
-        if(sendMessageResponse == null)
+        if (sendMessageResponse == null)
             throw new HttpRequestException(HttpStatusCode.NotFound.ToString());
 
         return sendMessageResponse;
