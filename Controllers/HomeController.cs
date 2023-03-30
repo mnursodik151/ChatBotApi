@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBotApi.Controllers
-{    
+{
     [Route("api/[controller]")]
     [ApiController]
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ITelegramMessageService _telegramMessageService;
 
-        public HomeController(ILogger<HomeController> logger) 
+        public HomeController(ILogger<HomeController> logger, ITelegramMessageService telegramMessageService)
         {
             _logger = logger;
+            _telegramMessageService = telegramMessageService;
         }
 
         // GET: api/Home
@@ -34,10 +36,15 @@ namespace ChatBotApi.Controllers
 
         // POST: api/Home
         [HttpPost]
-        public IActionResult Post([FromBody] TelegramMessage value)
+        public async Task<IActionResult> Post([FromBody] TelegramWebhookMessageDto value)
         {
-            _logger.Log(LogLevel.Information, "Message Received");
-            return Ok(value);
+            _logger.Log(LogLevel.Information, "Message Received", value);
+
+            return Ok(_telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto
+            {
+                chat_id = value.message.chat.id.ToString(),
+                text = value.message.text
+            }));
         }
     }
 }
