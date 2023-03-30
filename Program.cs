@@ -6,19 +6,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHttpClient();
 
 // Retrieve the Telegram bot token from an environment variable
 var telegramBotToken = Environment.GetEnvironmentVariable("TELEGRAM_BOT_TOKEN");
 
-builder.Services.AddHttpClient<ITelegramMessageService>(client =>
+builder.Services.AddHttpClient<ITelegramMessageService, TelegramMessageService>(client =>
 {
     client.BaseAddress = new Uri("https://api.telegram.org/");
-    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {telegramBotToken}");
-}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-{
-    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
 });
+
+// builder.Services.AddScoped<ITelegramMessageService, TelegramMessageService>();
 
 var app = builder.Build();
 

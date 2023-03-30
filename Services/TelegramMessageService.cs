@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -23,14 +24,10 @@ public class TelegramMessageService : ITelegramMessageService
 
     public async Task<TelegramSendMessageResponseDto> SendMessageAsync(TelegramSendMessageRequestDto request)
     {
-        var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"bot{_telegramBotToken}/sendMessage");
-        httpRequest.Content = new FormUrlEncodedContent(new Dictionary<string, string?>
-        {
-            {"chat_id", request.chat_id},
-            {"text", request.text}
-        });
+        var json = JsonConvert.SerializeObject(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var httpResponse = await _httpClient.SendAsync(httpRequest);
+        var httpResponse = await _httpClient.PostAsync($"bot{_telegramBotToken}/sendMessage", content);
         httpResponse.EnsureSuccessStatusCode();
 
         var responseJson = await httpResponse.Content.ReadAsStringAsync();

@@ -12,12 +12,12 @@ namespace ChatBotApi.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ITelegramMessageService _telegramMessageService;
+        private readonly ITelegramMessageService? _telegramMessageService;
 
-        public HomeController(ILogger<HomeController> logger, ITelegramMessageService telegramMessageService)
+        public HomeController(ILogger<HomeController> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
-            _telegramMessageService = telegramMessageService;
+            _telegramMessageService = serviceProvider.GetService<ITelegramMessageService>();
         }
 
         // GET: api/Home
