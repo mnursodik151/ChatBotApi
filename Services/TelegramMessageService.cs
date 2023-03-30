@@ -26,12 +26,14 @@ public class TelegramMessageService : ITelegramMessageService
     {
         var json = JsonConvert.SerializeObject(request);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        var httpResponse = await _httpClient.PostAsync(new UriBuilder()
+        var uriBuilder = new UriBuilder()
         {
-            Scheme = _httpClient.BaseAddress?.ToString(),
+            Scheme = _httpClient.BaseAddress?.Scheme,
+            Host = _httpClient.BaseAddress?.Host,
             Path = $"bot{_telegramBotToken}/sendMessage"
-        }.Uri, content);
+        };
+
+        var httpResponse = await _httpClient.PostAsync(uriBuilder.Uri, content);
         httpResponse.EnsureSuccessStatusCode();
 
         var responseJson = await httpResponse.Content.ReadAsStringAsync();
