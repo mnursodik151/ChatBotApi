@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OpenAI_API.Completions;
 
 namespace ChatBotApi.Controllers
 {
@@ -13,11 +14,13 @@ namespace ChatBotApi.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ITelegramMessageService? _telegramMessageService;
+        private readonly IOpenAiApiService? _openAiApiService;
 
         public HomeController(ILogger<HomeController> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _telegramMessageService = serviceProvider.GetService<ITelegramMessageService>();
+            _openAiApiService = serviceProvider.GetService<IOpenAiApiService>();
         }
 
         // GET: api/Home
@@ -38,14 +41,22 @@ namespace ChatBotApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TelegramWebhookMessageDto value)
         {
-            var request = new TelegramSendMessageRequestDto
+            try
             {
-                chat_id = value.message?.chat?.id.ToString(),
-                text = value.message?.text
-            };
-            _logger.Log(LogLevel.Information, $"Message Received, chatID = {request.chat_id}; text = {request.text}");
-            var result = await _telegramMessageService.SendMessageAsync(request);
-            return Ok(result);
+                var observable = _openAiApiService?.GetCompletionObservable();
+                var observer = new OpenAiCompletionObserver(_telegramMessageService, value.message.chat.id.ToString());
+                var subscription = observable?.Subscribe(observer);
+
+                await _openAiApiService.StreamCompletionEnumerableAsync(new CompletionRequest(value.message.text));
+                subscription?.Dispose();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical("Internal Server Error", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
