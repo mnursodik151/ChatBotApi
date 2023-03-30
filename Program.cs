@@ -1,4 +1,6 @@
 
+using OpenAI_API.Completions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,7 +15,7 @@ builder.Services.AddHttpClient<ITelegramMessageService, TelegramMessageService>(
     client.BaseAddress = new Uri("https://api.telegram.org/");
 });
 
-// builder.Services.AddScoped<ITelegramMessageService, TelegramMessageService>();
+builder.Services.AddScoped<IObservable<CompletionResult>, OpenAiCompletionObservable>();
 
 var app = builder.Build();
 
