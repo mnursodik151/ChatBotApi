@@ -39,12 +39,12 @@ namespace ChatBotApi.Controllers
         public async Task<IActionResult> Post([FromBody] TelegramWebhookMessageDto value)
         {
             _logger.Log(LogLevel.Information, "Message Received", value);
-
-            return Ok(_telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto
+            var result = await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto
             {
-                chat_id = value.message.chat.id.ToString(),
-                text = value.message.text
-            }));
+                chat_id = value.message?.chat?.id.ToString(),
+                text = value.message?.text
+            });
+            return Ok(result);
         }
     }
 }

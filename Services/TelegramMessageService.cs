@@ -1,3 +1,4 @@
+using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -5,7 +6,7 @@ public class TelegramMessageService : ITelegramMessageService
 {
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerSettings _jsonSerializerSettings;
-    private readonly string _telegramBotToken;
+    private readonly string? _telegramBotToken;
 
     public TelegramMessageService(HttpClient httpClient, IConfiguration configuration)
     {
@@ -23,7 +24,7 @@ public class TelegramMessageService : ITelegramMessageService
     public async Task<TelegramSendMessageResponseDto> SendMessageAsync(TelegramSendMessageRequestDto request)
     {
         var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"bot{_telegramBotToken}/sendMessage");
-        httpRequest.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+        httpRequest.Content = new FormUrlEncodedContent(new Dictionary<string, string?>
         {
             {"chat_id", request.chat_id},
             {"text", request.text}
@@ -34,6 +35,9 @@ public class TelegramMessageService : ITelegramMessageService
 
         var responseJson = await httpResponse.Content.ReadAsStringAsync();
         var sendMessageResponse = JsonConvert.DeserializeObject<TelegramSendMessageResponseDto>(responseJson, _jsonSerializerSettings);
+
+        if(sendMessageResponse == null)
+            throw new HttpRequestException(HttpStatusCode.NotFound.ToString());
 
         return sendMessageResponse;
     }

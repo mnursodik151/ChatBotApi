@@ -14,14 +14,11 @@ var telegramBotToken = Environment.GetEnvironmentVariable("TELEGRAM_BOT_TOKEN");
 builder.Services.AddHttpClient<ITelegramMessageService>(client =>
 {
     client.BaseAddress = new Uri("https://api.telegram.org/");
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {telegramBotToken}");
 }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {
     AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
-}).AddTypedClient(client => new TelegramMessageService(client))
-  .ConfigureHttpClient(client =>
-  {
-      client.DefaultRequestHeaders.Add("Authorization", $"Bearer {telegramBotToken}");
-  });
+});
 
 var app = builder.Build();
 
