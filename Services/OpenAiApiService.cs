@@ -12,7 +12,7 @@ public class OpenAiApiService : IOpenAiApiService
 
     public OpenAiApiService(IConfiguration configuration, ILogger<IOpenAiApiService> logger,
     IObservable<CompletionResult> openAiCompletionObservable, 
-    IObservable<ChatResult> openAiChatObservable)
+    IObservable<TelegramWebhookMessageDto> openAiChatObservable)
     {
         _logger = logger;
         _openAiApiToken = configuration["OpenAiAPIKey"];
