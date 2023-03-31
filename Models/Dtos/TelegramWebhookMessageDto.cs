@@ -25,7 +25,7 @@ public class Message
 public class User 
 {
     [JsonProperty]
-    public string? id {get; set;}
+    public int id {get; set;}
     [JsonProperty]
     public string? first_name {get; set;}
     [JsonProperty]

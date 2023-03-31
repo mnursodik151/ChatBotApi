@@ -43,7 +43,7 @@ namespace ChatBotApi.Controllers
         {
             try
             {
-                var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id);
+                var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id.ToString());
                 if(convo == null)
                     throw new Exception("Failed to get conversation from list");
 
@@ -57,7 +57,7 @@ namespace ChatBotApi.Controllers
                 var result = StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
                 await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto()
                 {
-                    chat_id = value.message.chat.id,
+                    chat_id = value.message.chat.id.ToString(),
                     text = result.ToString()
                 });
                 return result;
