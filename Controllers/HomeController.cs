@@ -47,7 +47,8 @@ namespace ChatBotApi.Controllers
                 var observer = new OpenAiCompletionObserver(_telegramMessageService, value.message.chat.id.ToString());
                 var subscription = observable?.Subscribe(observer);
 
-                await _openAiApiService.StreamCompletionEnumerableAsync(new CompletionRequest(value.message.text));
+                await _openAiApiService.StreamCompletionEnumerableAsync(new CompletionRequest(
+                    value.message.text, OpenAI_API.Models.Model.DavinciText, 255, 0.6));
                 subscription?.Dispose();
 
                 return Ok();

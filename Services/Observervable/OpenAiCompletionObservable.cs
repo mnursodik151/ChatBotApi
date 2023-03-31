@@ -14,6 +14,13 @@ public class OpenAiCompletionObservable : IObservable<CompletionResult>
         return new ObservableUnsubscriberUtil<CompletionResult>(_observers, observer);
     }
 
+    public void StartListening(CompletionResult result)
+    {
+        foreach (var observer in _observers)
+        {
+            observer.OnNext(result);
+        }
+    }
     public async Task StartListeningAsync(IAsyncEnumerable<CompletionResult> results)
     {
         await foreach (var token in results)
