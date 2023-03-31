@@ -39,27 +39,30 @@ namespace ChatBotApi.Controllers
 
         // POST: api/Home
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TelegramWebhookMessageDto value)
+        public IActionResult Post([FromBody] TelegramWebhookMessageDto value)
         {
             try
             {
+                if (value?.message == null)
+                    throw new Exception("Undandled Webhook Call format: Most likely state update");                
+
                 var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id.ToString());
-                if(convo == null)
+                if (convo == null)
                     throw new Exception("Failed to get conversation from list");
 
-                _openAiApiService?.AddChatMessage(value);                
+                // if(value.message.text.StartsWith('/'))
+                // {
+                    
+                // }
+
+                _openAiApiService?.AddChatMessage(value);
 
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogCritical("Internal Server Error", ex);
+                _logger.LogError("Internal Server Error", ex);
                 var result = StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-                await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto()
-                {
-                    chat_id = value.message.chat.id.ToString(),
-                    text = result.ToString()
-                });
                 return result;
             }
         }
