@@ -1,13 +1,9 @@
 using OpenAI_API.Completions;
 
-public class OpenAiCompletionObserver : IObserver<CompletionResult>
+public class OpenAiCompletionObserver : OpenAiObserver, IObserver<CompletionResult>
 {
-    private readonly ITelegramMessageService _telegramMessageService;
-    private readonly string _chatId;
-    public OpenAiCompletionObserver(ITelegramMessageService telegramMessageService, string chat_id)
+    public OpenAiCompletionObserver(ITelegramMessageService telegramMessageService, string chat_id) : base(telegramMessageService, chat_id)
     {
-        _telegramMessageService = telegramMessageService;
-        _chatId = chat_id;
     }
 
     public async void OnCompleted()

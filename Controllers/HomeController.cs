@@ -43,13 +43,11 @@ namespace ChatBotApi.Controllers
         {
             try
             {
-                var observable = _openAiApiService?.GetCompletionObservable();
-                var observer = new OpenAiCompletionObserver(_telegramMessageService, value.message.chat.id.ToString());
-                var subscription = observable?.Subscribe(observer);
+                var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id.ToString());
+                if(convo == null)
+                    throw new Exception("Failed to get conversation from list");
 
-                await _openAiApiService.StreamCompletionEnumerableAsync(new CompletionRequest(
-                    value.message.text, OpenAI_API.Models.Model.DavinciText, 255, 0.6));
-                subscription?.Dispose();
+                _openAiApiService?.AddChatMessage(value);                
 
                 return Ok();
             }

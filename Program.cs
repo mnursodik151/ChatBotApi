@@ -16,6 +16,7 @@ builder.Services.AddHttpClient<ITelegramMessageService, TelegramMessageService>(
 });
 
 builder.Services.AddScoped<IOpenAiApiService, OpenAiApiService>();
+builder.Services.AddScoped<IObservable<TelegramWebhookMessageDto>, OpenAiChatObservable>();
 builder.Services.AddScoped<IObservable<CompletionResult>, OpenAiCompletionObservable>();
 
 var app = builder.Build();
