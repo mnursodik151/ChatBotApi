@@ -61,7 +61,7 @@ namespace ChatBotApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Internal Server Error", ex);
+                _logger.LogError(ex, $"Internal Server Error : {ex.Message}");
                 var result = StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
                 return result;
             }
