@@ -46,7 +46,9 @@ namespace ChatBotApi.Controllers
             try
             {
                 if (value?.message == null)
-                    throw new Exception("Undandled Webhook Call format: Most likely state update");                
+                    throw new Exception("Undandled Webhook Call format: Most likely state update");   
+                if(!value.message.text.StartsWith("#"))
+                    throw new NotImplementedException("Not A Prompt");
 
                 var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id.ToString());
                 if (convo == null)
