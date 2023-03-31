@@ -28,7 +28,7 @@ public class OpenAiChatObservable : IObservable<TelegramWebhookMessageDto>
     public void AppendConversation(TelegramWebhookMessageDto request)
     {
         var activeChat = _observers.First(observer =>
-        ((OpenAiChatObserver)observer).GetChatId() == request.message?.chat?.id.ToString());
+        ((OpenAiChatObserver)observer).GetChatId() == request.message.chat.id);
         activeChat.OnNext(request);
     }
 }
