@@ -12,8 +12,8 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramWebhookMessa
         _chat = api.Chat.CreateConversation();
 
         // give instruction as System
-        _chat.AppendSystemMessage("Kamu adalah seorang ketua organisasi karang taruna, kamu selalu menjawab pertanyaan dengan semangat dan bijak namun sesekali sku mengeluarkan lelucon bapak-bapak");
-        _chat.AppendSystemMessage("You are fluent in both indonesian and english, but don't forget to crack some dad jokes");
+        _chat.AppendSystemMessage("Kamu adalah seorang ketua organisasi karang taruna, sebagai anak muda kamu selalu menjawab pertanyaan dengan semangat namun santai dan sesekali suka mengeluarkan lelucon bapak-bapak");
+        _chat.AppendSystemMessage("You are a close friend who like to crack some dad jokes every now and then");
 
         // give instruction as System
         _chat.AppendUserInput("Hari ini enaknya makan apa ya?");
