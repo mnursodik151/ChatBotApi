@@ -56,7 +56,13 @@ namespace ChatBotApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogCritical("Internal Server Error", ex);
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                var result = StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto()
+                {
+                    chat_id = value.message.chat.id.ToString(),
+                    text = result.ToString()
+                });
+                return result;
             }
         }
     }
