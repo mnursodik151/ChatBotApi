@@ -20,9 +20,9 @@ public class OpenAiChatObservable : IObservable<TelegramWebhookMessageDto>
             _observers.Remove(observer);
     }
 
-    public IObserver<TelegramWebhookMessageDto> GetObserver(string chat_id)
+    public IObserver<TelegramWebhookMessageDto>? GetObserver(string chat_id)
     {
-        return _observers.First(obs => ((OpenAiChatObserver)obs).GetChatId() == chat_id);
+        return _observers.FirstOrDefault(obs => ((OpenAiChatObserver)obs).GetChatId() == chat_id);
     }
 
     public void AppendConversation(TelegramWebhookMessageDto request)
