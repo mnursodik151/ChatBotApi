@@ -15,12 +15,14 @@ namespace ChatBotApi.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ITelegramMessageService? _telegramMessageService;
         private readonly IOpenAiApiService? _openAiApiService;
+        private readonly OpenAiCommandFactory _openAiCommandFactory;
 
         public HomeController(ILogger<HomeController> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _telegramMessageService = serviceProvider.GetService<ITelegramMessageService>();
             _openAiApiService = serviceProvider.GetService<IOpenAiApiService>();
+            _openAiCommandFactory = new OpenAiCommandFactory(logger, serviceProvider);
         }
 
         // GET: api/Home
@@ -39,7 +41,7 @@ namespace ChatBotApi.Controllers
 
         // POST: api/Home
         [HttpPost]
-        public IActionResult Post([FromBody] TelegramWebhookMessageDto value)
+        public async Task<IActionResult> Post([FromBody] TelegramWebhookMessageDto value)
         {
             try
             {
@@ -50,12 +52,8 @@ namespace ChatBotApi.Controllers
                 if (convo == null)
                     throw new Exception("Failed to get conversation from list");
 
-                // if(value.message.text.StartsWith('/'))
-                // {
-                    
-                // }
-
-                _openAiApiService?.AddChatMessage(value);
+                var command = _openAiCommandFactory.CreateCommand(value);
+                await command.ExecuteAsync();
 
                 return Ok();
             }

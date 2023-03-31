@@ -12,7 +12,7 @@ public class OpenAiApiService : IOpenAiApiService
 
     public OpenAiApiService(IConfiguration configuration, ILogger<IOpenAiApiService> logger,
     IObservable<CompletionResult> openAiCompletionObservable, 
-    IObservable<TelegramWebhookMessageDto> openAiChatObservable)
+    IObservable<TelegramSendMessageRequestDto> openAiChatObservable)
     {
         _logger = logger;
         _openAiApiToken = configuration["OpenAiAPIKey"];
@@ -36,7 +36,7 @@ public class OpenAiApiService : IOpenAiApiService
         _openAiCompletionObservable.StartListening(completionStream);                     
     }
 
-    public IObserver<TelegramWebhookMessageDto> TryAddConversation(ITelegramMessageService telegramMessageService, string chat_id)
+    public IObserver<TelegramSendMessageRequestDto> TryAddConversation(ITelegramMessageService telegramMessageService, string chat_id)
     {
         var conversation = _openAiConversationManager.GetObserver(chat_id);
         if(conversation == null)
@@ -49,8 +49,9 @@ public class OpenAiApiService : IOpenAiApiService
         return conversation;
     }
 
-    public void AddChatMessage(TelegramWebhookMessageDto request)
+    public Task AddChatMessage(TelegramSendMessageRequestDto request)
     {
         _openAiConversationManager.AppendConversation(request);
+        return Task.CompletedTask;
     }
 }

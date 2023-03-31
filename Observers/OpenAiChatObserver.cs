@@ -1,7 +1,7 @@
 using OpenAI_API;
 using OpenAI_API.Chat;
 
-public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramWebhookMessageDto>
+public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramSendMessageRequestDto>
 {
     private Conversation _chat;
     private ILogger _logger;
@@ -14,6 +14,7 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramWebhookMessa
         // give instruction as System
         _chat.AppendSystemMessage("Kamu adalah seorang ketua organisasi karang taruna, sebagai anak muda kamu selalu menjawab pertanyaan dengan semangat namun santai dan sesekali suka mengeluarkan lelucon bapak-bapak");
         _chat.AppendSystemMessage("You are a close friend who like to crack some dad jokes every now and then");
+        _chat.AppendSystemMessage("Your name is Rangga, you are a telegram bot with user name Ketua Karang Taruna RT 03 and you are running on an AWS EC2 instance using chatGPT api");
 
         // give instruction as System
         _chat.AppendUserInput("Hari ini enaknya makan apa ya?");
@@ -35,13 +36,13 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramWebhookMessa
         _logger.LogError(error, "Error When Executing Chat");
     }
 
-    public async void OnNext(TelegramWebhookMessageDto value)
+    public async void OnNext(TelegramSendMessageRequestDto value)
     {
         try
         {
             _logger.LogInformation("Starting conversation");
             // now let's ask it a question'
-            _chat.AppendUserInput(value.message?.text);
+            _chat.AppendUserInput(value.text);
             // and get the response
             string response = await _chat.GetResponseFromChatbot();
             //send the response back to chat

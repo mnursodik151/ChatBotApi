@@ -8,6 +8,6 @@ public interface IOpenAiApiService
 
     public Task<CompletionResult> CreateCompletionAsync(CompletionRequest request);
     public Task StreamCompletionEnumerableAsync(CompletionRequest request);
-    public IObserver<TelegramWebhookMessageDto> TryAddConversation(ITelegramMessageService telegramMessageService, string chat_id);
-    public void AddChatMessage(TelegramWebhookMessageDto request);
+    public IObserver<TelegramSendMessageRequestDto> TryAddConversation(ITelegramMessageService telegramMessageService, string chat_id);
+    public Task AddChatMessage(TelegramSendMessageRequestDto request);
 }
