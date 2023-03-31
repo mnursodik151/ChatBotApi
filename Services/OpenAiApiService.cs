@@ -23,7 +23,7 @@ public class OpenAiApiService : IOpenAiApiService
 
     public async Task StreamCompletionEnumerableAsync(CompletionRequest request)
     {
-        var completionStream = _openAiApi.Completions.StreamCompletionEnumerableAsync(request);
-        await _openAiCompletionObservable.StartListeningAsync(completionStream);                     
+        var completionStream = await _openAiApi.Completions.CreateCompletionAsync(request);
+        _openAiCompletionObservable.StartListening(completionStream);                     
     }
 }

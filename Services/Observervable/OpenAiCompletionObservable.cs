@@ -31,9 +31,9 @@ public class OpenAiCompletionObservable : IObservable<CompletionResult>
             }
         }
 
-        foreach (var observer in _observers.ToArray())
-        {
-            observer.OnCompleted();
-        }
+        // foreach (var observer in _observers.ToArray())
+        // {
+        //     observer.OnCompleted();
+        // }
     }
 }
