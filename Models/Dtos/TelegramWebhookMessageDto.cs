@@ -39,7 +39,7 @@ public class Reply
 public class User 
 {
     [JsonProperty]
-    public int id {get; set;}
+    public long id {get; set;}
     [JsonProperty]
     public string? first_name {get; set;}
     [JsonProperty]
