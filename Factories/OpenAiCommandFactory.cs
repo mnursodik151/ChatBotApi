@@ -51,12 +51,13 @@ public class OpenAiCommandFactory
         }
         else
         {
-            var config = _serviceProvider.GetService<IConfiguration>();            
+            var config = _serviceProvider.GetService<IConfiguration>(); 
+            _logger.LogInformation(input.message.reply_to_message?.text);           
             if (input.message.chat?.id > 0 || 
             input.message.text.Contains("@kkr_ai_bot") || 
             input.message.reply_to_message?.chat.id.ToString() == config["TelegramBotToken"].Substring(0, 10))
             {
-                input.message.text = $"{input.message.reply_to_message?.text} \n {input.message.text ?? string.Empty}";
+                input.message.text = $"{input.message.reply_to_message?.text} \n {input.message.text ?? string.Empty}";                
                 return new ReplyMessageCommand("DM",
                                                    input,
                                                    _logger,
