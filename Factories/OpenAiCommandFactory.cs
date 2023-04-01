@@ -52,7 +52,7 @@ public class OpenAiCommandFactory
         else
         {
             var config = _serviceProvider.GetService<IConfiguration>(); 
-            _logger.LogInformation(input.message.reply_to_message?.chat?.id.ToString());           
+            _logger.LogInformation(input.message?.from?.id.ToString());           
             if (input.message.chat?.id > 0 || 
             input.message.text.Contains("@kkr_ai_bot") || 
             input.message.reply_to_message?.chat.id.ToString() == config["TelegramBotToken"].Substring(0, 10))
