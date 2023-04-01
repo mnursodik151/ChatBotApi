@@ -57,6 +57,7 @@ public class OpenAiCommandFactory
             input.message.reply_to_message?.chat.id.ToString() == config["TelegramBotToken"].Substring(0, 10))
             {
                 input.message.text = $"{input.message.reply_to_message?.text} \n {input.message.text ?? string.Empty}";
+                _logger.LogInformation(input.message.reply_to_message?.text);
                 return new ReplyMessageCommand("DM",
                                                    input,
                                                    _logger,
