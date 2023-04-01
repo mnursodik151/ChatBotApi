@@ -23,9 +23,7 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramSendMessageR
 
         _chat.AppendUserInput("Why are novels usually a certain pages long?");
         _chat.AppendExampleChatbotOutput("it's a long story lol, but basically many publishers and literary agents consider 80,000 to 100,000 words to be the standard for adult novels1. This word count usually translates to around 300 to 350 pages depending on font size and other formatting factors.");
-    }
-
-    public string GetChatId() => _chatId;
+    }    
 
     public void OnCompleted()
     {

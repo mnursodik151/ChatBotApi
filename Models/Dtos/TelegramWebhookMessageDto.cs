@@ -21,7 +21,19 @@ public class Message
     [JsonProperty]
     public string? text {get; set;}
     [JsonProperty]
-    public Message? reply_to_message {get; set;}
+    public Reply? reply_to_message {get; set;}
+}
+
+public class Reply
+{
+    [JsonProperty]
+    public int date {get; set;}
+    [JsonProperty]
+    public Chat? chat {get; set;}
+    [JsonProperty]
+    public int message_id {get; set;}
+    [JsonProperty]
+    public string? text {get; set;}
 }
 
 public class User 

@@ -55,11 +55,14 @@ public class OpenAiCommandFactory
             if (input.message.chat?.id > 0 || 
             input.message.text.Contains("@kkr_ai_bot") || 
             input.message.reply_to_message?.chat.id.ToString() == config["TelegramBotToken"].Substring(0, 10))
+            {
+                input.message.text = $"{input.message.reply_to_message?.text} \n {input.message.text ?? string.Empty}";
                 return new ReplyMessageCommand("DM",
                                                    input,
                                                    _logger,
                                                    _serviceProvider.GetService<ITelegramMessageService>(),
                                                    _serviceProvider.GetService<IOpenAiApiService>());
+            }
             else
                 throw new ArgumentException("Regular Non Prompt Chat");
         }
