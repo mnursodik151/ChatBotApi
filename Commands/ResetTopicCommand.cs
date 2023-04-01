@@ -12,7 +12,7 @@ public class ResetTopicCommand : OpenAiResponseCommand
 
     public override Task ExecuteAsync()
     {
-        _openAiApiService.GetOpenAiConversationManager().Unsubscribe(_chat_id);
+        _openAiApiService.GetOpenAiConversationManager().Unsubscribe(_chat_id, _command);
         return Task.CompletedTask;
     }
 }
