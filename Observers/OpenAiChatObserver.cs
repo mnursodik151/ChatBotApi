@@ -6,7 +6,8 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramSendMessageR
     private Conversation _chat;
     private ILogger _logger;
 
-    public OpenAiChatObserver(OpenAIAPI api, ITelegramMessageService telegramMessageService, string chat_id, ILogger logger) : base(telegramMessageService, chat_id)
+    public OpenAiChatObserver(OpenAIAPI api, ITelegramMessageService telegramMessageService, ILogger logger, string chat_id, string command) 
+    : base(telegramMessageService, chat_id, command)
     {
         _logger = logger;
         _chat = api.Chat.CreateConversation();

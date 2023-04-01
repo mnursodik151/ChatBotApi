@@ -14,11 +14,13 @@ public class OpenAiChatObservable : IObservable<TelegramSendMessageRequestDto>
         return new ObservableUnsubscriberUtil<TelegramSendMessageRequestDto>(_observers, observer);
     }
 
-    public void Unsubscribe(string chat_id)
+    public void Unsubscribe(string chat_id, string? command = null)
     {
-        var observer = _observers.FirstOrDefault(obs => ((OpenAiChatObserver)obs).GetChatId() == chat_id);
+        var observer = _observers.Where(obs => ((OpenAiObserver)obs).GetChatId() == chat_id);
+        if(command != null)
+            observer.Where(obs => ((OpenAiObserver)obs).GetCommandName() == command);
         if ( observer != null)
-            _observers.Remove(observer);
+            _observers.Remove(observer.First());
     }
 
     public IObserver<TelegramSendMessageRequestDto>? GetObserver(string chat_id)

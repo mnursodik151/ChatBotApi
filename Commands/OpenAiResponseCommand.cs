@@ -16,17 +16,11 @@ public abstract class OpenAiResponseCommand : ICommand
         _logger = logger;
     }
 
-    protected OpenAiResponseCommand(string name, ILogger logger, ITelegramMessageService telegramMessageService)
-    {
-        this.name = name;
-        this.logger = logger;
-        this.telegramMessageService = telegramMessageService;
-    }
+    public string GetCommandName() => _name;
 
     public virtual Task ExecuteAsync()
     {
-        _logger.LogInformation("Regular Non Prompt Chat");
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     protected TelegramSendMessageRequestDto GenerateSendMessageRequest(TelegramWebhookMessageDto input)

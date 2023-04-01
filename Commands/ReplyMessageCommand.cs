@@ -1,4 +1,4 @@
-public class ReplyMessageCommand : OpenAiResponseCommand, ICommand
+public class ReplyMessageCommand : OpenAiResponseCommand
 {
     private readonly TelegramWebhookMessageDto _requestDto;
     public ReplyMessageCommand(string name, TelegramWebhookMessageDto message, ILogger logger, ITelegramMessageService telegramMessageService, IOpenAiApiService openAiApiService) 
@@ -7,10 +7,9 @@ public class ReplyMessageCommand : OpenAiResponseCommand, ICommand
         _requestDto = message;
     }
 
-    public override Task ExecuteAsync()
+    public override async Task ExecuteAsync()
     {
         var requestDto = GenerateSendMessageRequest(_requestDto);
-        _openAiApiService.AddChatMessage(requestDto);
-        return Task.CompletedTask;
+        await _openAiApiService.AddChatMessage(requestDto);
     }
 }

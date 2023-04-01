@@ -36,12 +36,12 @@ public class OpenAiApiService : IOpenAiApiService
         _openAiCompletionObservable.StartListening(completionStream);                     
     }
 
-    public IObserver<TelegramSendMessageRequestDto> TryAddConversation(ITelegramMessageService telegramMessageService, string chat_id)
+    public IObserver<TelegramSendMessageRequestDto> TryAddConversation(ITelegramMessageService telegramMessageService, string chat_id, string command)
     {
         var conversation = _openAiConversationManager.GetObserver(chat_id);
         if(conversation == null)
         {            
-            conversation = new OpenAiChatObserver(_openAiApi, telegramMessageService, chat_id, _logger);
+            conversation = new OpenAiChatObserver(_openAiApi, telegramMessageService, _logger, chat_id, command);
             _openAiConversationManager.Subscribe(conversation);
             _logger.LogInformation($"Conversation with {chat_id} created");
         } 

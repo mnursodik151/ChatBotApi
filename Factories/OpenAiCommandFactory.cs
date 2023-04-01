@@ -11,16 +11,19 @@ public class OpenAiCommandFactory
     }
     public ICommand CreateCommand(TelegramWebhookMessageDto input)
     {
-        int index = input.message.text.IndexOf(' ');
-        string command = string.Empty, message = string.Empty;
-        if (index != -1)
+        if (input.message.text.StartsWith("#"))
         {
-            command = input.message.text.Substring(0, index);
-            message = input.message.text.Substring(index + 1);
-        }
-        _logger.LogInformation($"{command} Command received");
-        if (command.StartsWith("#"))
-        {
+            int index = input.message.text.IndexOf(' ');
+            string command = string.Empty, message = string.Empty;
+            if (index != -1)
+            {
+                command = input.message.text.Substring(0, index);
+                message = input.message.text.Substring(index + 1);
+            }
+            else
+                command = input.message.text;
+
+            _logger.LogInformation($"{command} Command received");
             string name = command.Substring(1);
             switch (name)
             {
@@ -36,13 +39,29 @@ public class OpenAiCommandFactory
                                                  _logger,
                                                  _serviceProvider.GetService<ITelegramMessageService>(),
                                                  _serviceProvider.GetService<IOpenAiApiService>());
+                case "question":
+                    return new CreateCompletionCommand(name,
+                                                       message,
+                                                       _logger,
+                                                       _serviceProvider.GetService<ITelegramMessageService>(),
+                                                       _serviceProvider.GetService<IOpenAiApiService>());
                 default:
                     throw new ArgumentException("Invalid command.");
             }
         }
         else
         {
-            throw new NotImplementedException("Regular Non Prompt Chat");
+            var config = _serviceProvider.GetService<IConfiguration>();            
+            if (input.message.chat?.id > 0 || 
+            input.message.text.Contains("@kkr_ai_bot") || 
+            input.message.reply_to_message?.chat.id.ToString() == config["TelegramBotToken"].Substring(0, 10))
+                return new ReplyMessageCommand("DM",
+                                                   input,
+                                                   _logger,
+                                                   _serviceProvider.GetService<ITelegramMessageService>(),
+                                                   _serviceProvider.GetService<IOpenAiApiService>());
+            else
+                throw new ArgumentException("Regular Non Prompt Chat");
         }
     }
 }

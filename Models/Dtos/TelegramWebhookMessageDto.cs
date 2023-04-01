@@ -20,6 +20,8 @@ public class Message
     public int message_id {get; set;}
     [JsonProperty]
     public string? text {get; set;}
+    [JsonProperty]
+    public Message? reply_to_message {get; set;}
 }
 
 public class User 
@@ -39,4 +41,3 @@ public class Chat : User
     [JsonProperty]
     public string? type {get; set;}
 }
-

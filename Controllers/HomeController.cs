@@ -46,15 +46,14 @@ namespace ChatBotApi.Controllers
             try
             {
                 if (value?.message == null)
-                    throw new Exception("Undandled Webhook Call format: Most likely state update");   
-                if(!value.message.text.StartsWith("#"))
-                    throw new NotImplementedException("Not A Prompt");
+                    throw new Exception("Undandled Webhook Call format: Most likely state update");
 
-                var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id.ToString());
+                var command = _openAiCommandFactory.CreateCommand(value);
+
+                var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id.ToString(), command.GetCommandName());
                 if (convo == null)
                     throw new Exception("Failed to get conversation from list");
 
-                var command = _openAiCommandFactory.CreateCommand(value);
                 await command.ExecuteAsync();
 
                 return Ok();
@@ -62,7 +61,7 @@ namespace ChatBotApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Internal Server Error : {ex.Message}");
-                return Ok("ok with caveats");
+                return Ok($"ok with caveats : {ex.Message}");
             }
         }
     }
