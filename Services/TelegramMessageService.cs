@@ -22,7 +22,7 @@ public class TelegramMessageService : ITelegramMessageService
         };
     }
 
-    public async Task<TelegramSendMessageResponseDto> SendMessageAsync(TelegramSendMessageRequestDto request)
+    public async Task<TelegramSendResponseDto> SendMessageAsync(TelegramSendMessageRequestDto request)
     {
         var json = JsonConvert.SerializeObject(request);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -37,7 +37,7 @@ public class TelegramMessageService : ITelegramMessageService
         httpResponse.EnsureSuccessStatusCode();
 
         var responseJson = await httpResponse.Content.ReadAsStringAsync();
-        var sendMessageResponse = JsonConvert.DeserializeObject<TelegramSendMessageResponseDto>(responseJson, _jsonSerializerSettings);
+        var sendMessageResponse = JsonConvert.DeserializeObject<TelegramSendResponseDto>(responseJson, _jsonSerializerSettings);
 
         if (sendMessageResponse == null)
             throw new HttpRequestException(HttpStatusCode.NotFound.ToString());

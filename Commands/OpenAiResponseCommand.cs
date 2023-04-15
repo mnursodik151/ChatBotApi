@@ -8,7 +8,10 @@ public abstract class OpenAiResponseCommand : ICommand
     private ILogger logger;
     private ITelegramMessageService telegramMessageService;
 
-    public OpenAiResponseCommand(string name, ILogger logger, ITelegramMessageService telegramMessageService, IOpenAiApiService openAiApiService)
+    public OpenAiResponseCommand(string name,
+                                 ILogger logger,
+                                 ITelegramMessageService telegramMessageService,
+                                 IOpenAiApiService openAiApiService)
     {
         _name = name;
         _telegramMessageService = telegramMessageService;
@@ -29,8 +32,8 @@ public abstract class OpenAiResponseCommand : ICommand
         int index = input.message.text.IndexOf(' ');
         if (index != -1)
         {
-            result.chat_id = input.message.chat.id.ToString();
-            result.text = input.message.text.Substring(index + 1);
+            result.ChatId = input.message.chat.id;
+            result.Text = input.message.text.Substring(index + 1);
         }
 
         return result;        

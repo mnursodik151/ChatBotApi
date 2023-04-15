@@ -10,11 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient<ITelegramMessageService, TelegramMessageService>(client =>
-{
-    client.BaseAddress = new Uri("https://api.telegram.org/");
-});
+// builder.Services.AddHttpClient<ITelegramMessageService, TelegramMessageService>(client =>
+// {
+//     client.BaseAddress = new Uri("https://api.telegram.org/");
+// });
 
+builder.Services.AddScoped<ITelegramMessageService, TelegramMessageServiceV2>();
+builder.Services.AddScoped<ITextToSpeechService, GCPTextToSpeechService>();
 builder.Services.AddScoped<IOpenAiApiService, OpenAiApiService>();
 builder.Services.AddScoped<IObservable<CompletionResult>, OpenAiCompletionObservable>();
 builder.Services.AddSingleton<IObservable<TelegramSendMessageRequestDto>, OpenAiChatObservable>();

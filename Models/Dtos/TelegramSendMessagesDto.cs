@@ -3,13 +3,29 @@ using Newtonsoft.Json;
 public class TelegramSendMessageRequestDto
 {
     [JsonProperty]
-    public string? chat_id {get; set;}
+    public long ChatId { get; set; }
     [JsonProperty]
-    public string? text {get; set;}
+    public string? Text { get; set; }
 }
 
-public class TelegramSendMessageResponseDto
+public class TelegramSendVoiceRequestDto
 {
     [JsonProperty]
-    public Message? message {get; set;}
+    public long ChatId { get; set; }
+    [JsonProperty]
+    public string? VoiceName { get; set; }
+    [JsonProperty]
+    public byte[]? VoiceData { get; set; }
+    [JsonProperty]
+    public int Duration { get; set; }
+    [JsonProperty]
+    public string? Caption { get; set; }
+}
+
+public class TelegramSendResponseDto
+{
+    [JsonProperty]
+    public string? MessageId { get; set; }
+    [JsonProperty]
+    public string? ChatId { get; set; }
 }

@@ -2,7 +2,7 @@ using OpenAI_API.Completions;
 
 public class OpenAiCompletionObserver : OpenAiObserver, IObserver<CompletionResult>
 {
-    public OpenAiCompletionObserver(ITelegramMessageService telegramMessageService, string chat_id, string command) 
+    public OpenAiCompletionObserver(ITelegramMessageService telegramMessageService, long chat_id, string command) 
     : base(telegramMessageService, chat_id, command)
     {
     }
@@ -11,8 +11,8 @@ public class OpenAiCompletionObserver : OpenAiObserver, IObserver<CompletionResu
     {
         await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto
         {
-            chat_id = _chatId,
-            text = "Done"
+            ChatId = _chatId,
+            Text = "Done"
         });
     }
 
@@ -25,8 +25,8 @@ public class OpenAiCompletionObserver : OpenAiObserver, IObserver<CompletionResu
     {
         await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto
         {
-            chat_id = _chatId,
-            text = value.ToString()
+            ChatId = _chatId,
+            Text = value.ToString()
         });
     }
 }

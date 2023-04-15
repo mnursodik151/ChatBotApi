@@ -1,9 +1,9 @@
 public class ResetTopicCommand : OpenAiResponseCommand
 {
-    private string _chat_id;
+    private long _chat_id;
     private string? _command;
 
-    public ResetTopicCommand(string name, string chat_id, ILogger logger, ITelegramMessageService telegramMessageService, IOpenAiApiService openAiApiService, string? command = null) 
+    public ResetTopicCommand(string name, long chat_id, ILogger logger, ITelegramMessageService telegramMessageService, IOpenAiApiService openAiApiService, string? command = null) 
     : base(name, logger, telegramMessageService, openAiApiService)
     {
         _chat_id = chat_id;

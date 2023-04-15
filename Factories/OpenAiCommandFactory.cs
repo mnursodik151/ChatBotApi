@@ -35,7 +35,7 @@ public class OpenAiCommandFactory
                                                    _serviceProvider.GetService<IOpenAiApiService>());
                 case "resetTopic":
                     return new ResetTopicCommand(name,
-                                                 input.message.chat.id.ToString(),
+                                                 input.message.chat.id,
                                                  _logger,
                                                  _serviceProvider.GetService<ITelegramMessageService>(),
                                                  _serviceProvider.GetService<IOpenAiApiService>());

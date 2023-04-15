@@ -1,4 +1,4 @@
 public interface ITelegramMessageService 
 {
-    public Task<TelegramSendMessageResponseDto> SendMessageAsync(TelegramSendMessageRequestDto requestDto);
+    public Task<TelegramSendResponseDto> SendMessageAsync(TelegramSendMessageRequestDto requestDto);
 }

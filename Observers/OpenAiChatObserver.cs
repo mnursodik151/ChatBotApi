@@ -6,7 +6,7 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramSendMessageR
     private Conversation _chat;
     private ILogger _logger;
 
-    public OpenAiChatObserver(OpenAIAPI api, ITelegramMessageService telegramMessageService, ILogger logger, string chat_id, string command) 
+    public OpenAiChatObserver(OpenAIAPI api, ITelegramMessageService telegramMessageService, ILogger logger, long chat_id, string command) 
     : base(telegramMessageService, chat_id, command)
     {
         _logger = logger;
@@ -41,14 +41,14 @@ public class OpenAiChatObserver : OpenAiObserver, IObserver<TelegramSendMessageR
         {
             _logger.LogInformation("Starting conversation");
             // now let's ask it a question'
-            _chat.AppendUserInput(value.text);
+            _chat.AppendUserInput(value.Text);
             // and get the response
             string response = await _chat.GetResponseFromChatbot();
             //send the response back to chat
             await _telegramMessageService.SendMessageAsync(new TelegramSendMessageRequestDto()
             {
-                chat_id = _chatId,
-                text = response
+                ChatId = _chatId,
+                Text = response
             });
         }
         catch (Exception ex)

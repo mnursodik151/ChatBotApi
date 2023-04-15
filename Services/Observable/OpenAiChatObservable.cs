@@ -14,7 +14,7 @@ public class OpenAiChatObservable : IObservable<TelegramSendMessageRequestDto>
         return new ObservableUnsubscriberUtil<TelegramSendMessageRequestDto>(_observers, observer);
     }
 
-    public void Unsubscribe(string chat_id, string? command = null)
+    public void Unsubscribe(long chat_id, string? command = null)
     {
         var observer = _observers.Where(obs => ((OpenAiObserver)obs).GetChatId() == chat_id);
         if(command != null)
@@ -23,7 +23,7 @@ public class OpenAiChatObservable : IObservable<TelegramSendMessageRequestDto>
             _observers.Remove(observer.First());
     }
 
-    public IObserver<TelegramSendMessageRequestDto>? GetObserver(string chat_id)
+    public IObserver<TelegramSendMessageRequestDto>? GetObserver(long chat_id)
     {
         return _observers.FirstOrDefault(obs => ((OpenAiChatObserver)obs).GetChatId() == chat_id);
     }
@@ -31,7 +31,7 @@ public class OpenAiChatObservable : IObservable<TelegramSendMessageRequestDto>
     public Task AppendConversation(TelegramSendMessageRequestDto request)
     {
         var activeChat = _observers.First(observer =>
-        ((OpenAiChatObserver)observer).GetChatId() == request.chat_id);
+        ((OpenAiChatObserver)observer).GetChatId() == request.ChatId);
         activeChat.OnNext(request);
         return Task.CompletedTask;
     }

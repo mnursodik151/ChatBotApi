@@ -21,7 +21,23 @@ public class Message
     [JsonProperty]
     public string? text {get; set;}
     [JsonProperty]
+    public Voice? voice {get; set;}
+    [JsonProperty]
     public Reply? reply_to_message {get; set;}
+}
+
+public class Voice 
+{
+    [JsonProperty]
+    public string? file_id {get; set;}
+    [JsonProperty]
+    public string? file_unique_id {get; set;}
+    [JsonProperty]
+    public int duration {get; set;}
+    [JsonProperty]
+    public string? mime_type {get; set;}
+    [JsonProperty]
+    public int file_size {get; set;}
 }
 
 public class Reply
