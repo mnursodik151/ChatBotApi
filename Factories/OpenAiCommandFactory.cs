@@ -19,15 +19,15 @@ public class OpenAiCommandFactory
 
             _logger.LogInformation($"#{commandName} Command received");
 
-            Func<string, ICommand> createReplyMessageCommand = (cmdName) => new ReplyMessageCommand(Enum.Parse<ChatCommands>(cmdName),
+            Func<ChatCommands, ICommand> createReplyMessageCommand = (cmdName) => new ReplyMessageCommand(cmdName,
                                                                                                     input,
                                                                                                     _logger,
                                                                                                     _serviceProvider.GetService<ITelegramMessageService>(),
                                                                                                     _serviceProvider.GetService<IOpenAiApiService>());
             var commandFactory = new Dictionary<string, Func<ICommand>>
             {
-                [ChatCommands.Chat.GetStringValue()] = () => createReplyMessageCommand(ChatCommands.Chat.GetStringValue()),
-                [ChatCommands.Voice.GetStringValue()] = () => createReplyMessageCommand(ChatCommands.Voice.GetStringValue()),
+                [ChatCommands.Chat.GetStringValue()] = () => createReplyMessageCommand(ChatCommands.Chat),
+                [ChatCommands.Voice.GetStringValue()] = () => createReplyMessageCommand(ChatCommands.Voice),
                 [ChatCommands.ResetTopic.GetStringValue()] = () => new ResetTopicCommand(ChatCommands.ResetTopic,
                                                                                          input.message.chat.id,
                                                                                          _logger,

@@ -36,6 +36,7 @@ public class OpenAiChatObservable : IObservable<TelegramSendMessageRequestDto>
 
         switch (command)
         {
+            case ChatCommands.Dm:
             case ChatCommands.Chat:
                 activeChat = _observers.OfType<OpenAiChatObserver>()
                     .FirstOrDefault(obs => obs.GetChatId() == request.ChatId && obs.GetCommandName() == command.GetStringValue());
