@@ -28,14 +28,15 @@ public class GCPTextToSpeechService : ITextToSpeechService
         // Build the voice request.
         var voiceSelection = new VoiceSelectionParams
         {
-            LanguageCode = "en-US",
-            SsmlGender = SsmlVoiceGender.Neutral
+            LanguageCode = "en-GB",
+            Name = "en-GB-Standard-D",
+            SsmlGender = SsmlVoiceGender.Male
         };
 
         // Select the type of audio file you want returned.
         var audioConfig = new AudioConfig
         {
-            AudioEncoding = AudioEncoding.Mp3
+            AudioEncoding = AudioEncoding.OggOpus
         };
 
         // Perform the text-to-speech request.
