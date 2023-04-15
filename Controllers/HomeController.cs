@@ -48,18 +48,22 @@ namespace ChatBotApi.Controllers
             try
             {
                 if (value?.message == null)
-                    throw new Exception("Undandled Webhook Call format: Most likely state update");
+                {
+                    throw new Exception("Unhandled Webhook Call format: Most likely state update");
+                }
 
                 var command = _openAiCommandFactory.CreateCommand(value);
 
-                var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id, command.GetCommandName());
-                if (convo == null)
-                    throw new InvalidOperationException("Failed to get conversation from list");
+                if (command.GetType() != typeof(ResetTopicCommand))
+                {
+                    var convo = _openAiApiService?.TryAddConversation(_telegramMessageService, value.message.chat.id, command.GetCommandName())
+                                ?? throw new InvalidOperationException("Failed to get conversation from list");
+                }
 
                 await command.ExecuteAsync();
-
                 return Ok();
             }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Internal Server Error : {ex.Message}");
@@ -71,7 +75,7 @@ namespace ChatBotApi.Controllers
         public async Task<IActionResult> DownloadAudio()
         {
             var text = "Hello world!";
-            var audioStream = await _textToSpeechService.GenerateAudioStreamAsync(text);
+            var audioStream = await _textToSpeechService.GenerateAudioByteAsync(text);
 
             // Set the content type and headers for the response.
             HttpContext.Response.ContentType = "audio/mpeg";

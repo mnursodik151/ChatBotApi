@@ -1,5 +1,5 @@
 public interface ICommand
 {
-    public string GetCommandName();
+    public ChatCommands GetCommandName();
     public Task ExecuteAsync();
 }

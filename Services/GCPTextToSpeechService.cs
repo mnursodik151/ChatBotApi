@@ -17,7 +17,7 @@ public class GCPTextToSpeechService : ITextToSpeechService
         _textToSpeechClient = builder.Build();
     }
 
-    public async Task<Stream> GenerateAudioStreamAsync(string text)
+    public async Task<byte[]> GenerateAudioByteAsync(string text)
     {
         // Set the text input to be synthesized.
         var input = new SynthesisInput
@@ -41,12 +41,14 @@ public class GCPTextToSpeechService : ITextToSpeechService
         // Perform the text-to-speech request.
         var response = await _textToSpeechClient.SynthesizeSpeechAsync(input, voiceSelection, audioConfig);
 
-        // Get the audio content as a stream.
-        var audioStream = new MemoryStream(response.AudioContent.ToByteArray());
+        return response.AudioContent.ToByteArray();
 
-        // Set the stream position to the beginning so that it can be read from the start.
-        audioStream.Position = 0;
+        // // Get the audio content as a stream.
+        // var audioStream = new MemoryStream(response.AudioContent.ToByteArray());
 
-        return audioStream;
+        // // Set the stream position to the beginning so that it can be read from the start.
+        // audioStream.Position = 0;
+
+        // return audioStream;
     }
 }

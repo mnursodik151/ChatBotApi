@@ -1,4 +1,4 @@
 public interface ITextToSpeechService
 {
-    Task<Stream> GenerateAudioStreamAsync(string text);
+    Task<byte[]> GenerateAudioByteAsync(string text);
 }

@@ -17,22 +17,41 @@ public class OpenAiChatObservable : IObservable<TelegramSendMessageRequestDto>
     public void Unsubscribe(long chat_id, string? command = null)
     {
         var observer = _observers.Where(obs => ((OpenAiObserver)obs).GetChatId() == chat_id);
-        if(command != null)
+        if (command != null)
             observer.Where(obs => ((OpenAiObserver)obs).GetCommandName() == command);
-        if ( observer != null)
+        if (observer != null)
             _observers.Remove(observer.First());
     }
 
-    public IObserver<TelegramSendMessageRequestDto>? GetObserver(long chat_id)
+    public IObserver<TelegramSendMessageRequestDto>? GetObserver(long chat_id, ChatCommands command)
     {
-        return _observers.FirstOrDefault(obs => ((OpenAiChatObserver)obs).GetChatId() == chat_id);
+        return _observers
+            .OfType<OpenAiObserver>()
+            .FirstOrDefault(obs => obs.GetChatId() == chat_id && obs.GetCommandName() == command.GetStringValue());
     }
 
-    public Task AppendConversation(TelegramSendMessageRequestDto request)
+    public Task AppendConversation(TelegramSendMessageRequestDto request, ChatCommands command)
     {
-        var activeChat = _observers.First(observer =>
-        ((OpenAiChatObserver)observer).GetChatId() == request.ChatId);
-        activeChat.OnNext(request);
+        OpenAiObserver? activeChat = null;
+
+        switch (command)
+        {
+            case ChatCommands.Chat:
+                activeChat = _observers.OfType<OpenAiChatObserver>()
+                    .FirstOrDefault(obs => obs.GetChatId() == request.ChatId && obs.GetCommandName() == command.GetStringValue());
+                break;
+            case ChatCommands.Voice:
+                activeChat = _observers.OfType<OpenAiVoiceChatObserver>()
+                    .FirstOrDefault(obs => obs.GetChatId() == request.ChatId && obs.GetCommandName() == command.GetStringValue());
+                break;
+        }
+
+        if (activeChat != null)
+        {
+            activeChat.OnNext(request);
+        }
+
         return Task.CompletedTask;
     }
+
 }

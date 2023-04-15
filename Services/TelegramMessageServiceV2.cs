@@ -12,11 +12,14 @@ using Telegram.Bot.Types.InputFiles;
 public class TelegramMessageServiceV2 : ITelegramMessageService
 {
     private readonly TelegramBotClient _botClient;
+    private readonly ITextToSpeechService _textToSpeechService;
 
-    public TelegramMessageServiceV2(IConfiguration configuration)
+    public TelegramMessageServiceV2(IConfiguration configuration, ITextToSpeechService textToSpeechService)
     {
         var telegramBotToken = configuration["TelegramBotToken"];
         _botClient = new TelegramBotClient(telegramBotToken);
+        
+        _textToSpeechService = textToSpeechService;
     }
 
     public async Task<TelegramSendResponseDto> SendMessageAsync(TelegramSendMessageRequestDto request)
@@ -28,6 +31,16 @@ public class TelegramMessageServiceV2 : ITelegramMessageService
             MessageId = message.MessageId.ToString(),
             ChatId = message.Chat.Id.ToString()
         };
+    }
+
+    public async Task<TelegramSendResponseDto> SendVoiceAsync(TelegramSendMessageRequestDto request)
+    {
+        var sendVoiceRequest = new TelegramSendVoiceRequestDto()
+        {
+            ChatId = request.ChatId,
+            VoiceData = await _textToSpeechService.GenerateAudioByteAsync(request.Text)
+        };
+        return await SendVoiceAsync(sendVoiceRequest);
     }
 
     public async Task<TelegramSendResponseDto> SendVoiceAsync(TelegramSendVoiceRequestDto request)

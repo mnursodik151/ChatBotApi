@@ -1,14 +1,13 @@
 public abstract class OpenAiResponseCommand : ICommand
 {
-    protected string _name;
+    protected ChatCommands _name;
     protected ITelegramMessageService _telegramMessageService; 
     protected readonly IOpenAiApiService _openAiApiService;
     protected ILogger _logger;
-    private string name;
     private ILogger logger;
     private ITelegramMessageService telegramMessageService;
 
-    public OpenAiResponseCommand(string name,
+    public OpenAiResponseCommand(ChatCommands name,
                                  ILogger logger,
                                  ITelegramMessageService telegramMessageService,
                                  IOpenAiApiService openAiApiService)
@@ -19,7 +18,7 @@ public abstract class OpenAiResponseCommand : ICommand
         _logger = logger;
     }
 
-    public string GetCommandName() => _name;
+    public ChatCommands GetCommandName() => _name;
 
     public virtual Task ExecuteAsync()
     {

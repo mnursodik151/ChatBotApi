@@ -8,6 +8,6 @@ public interface IOpenAiApiService
 
     public Task<CompletionResult> CreateCompletionAsync(CompletionRequest request);
     public Task StreamCompletionEnumerableAsync(CompletionRequest request);
-    public IObserver<TelegramSendMessageRequestDto> TryAddConversation(ITelegramMessageService telegramMessageService, long chat_id, string command);
-    public Task AddChatMessage(TelegramSendMessageRequestDto request);
+    public IObserver<TelegramSendMessageRequestDto> TryAddConversation(ITelegramMessageService telegramMessageService, long chat_id, ChatCommands command);
+    public Task AddChatMessage(TelegramSendMessageRequestDto request, ChatCommands command);
 }

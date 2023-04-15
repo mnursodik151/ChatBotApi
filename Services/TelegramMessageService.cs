@@ -44,4 +44,14 @@ public class TelegramMessageService : ITelegramMessageService
 
         return sendMessageResponse;
     }
+
+    public Task<TelegramSendResponseDto> SendVoiceAsync(TelegramSendVoiceRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<TelegramSendResponseDto> SendVoiceAsync(TelegramSendMessageRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
 }
