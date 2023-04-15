@@ -12,6 +12,14 @@ public static class AudioConversionUtils
         using var waveStream = new WaveFileReader(memoryStream);
         return (int)waveStream.TotalTime.TotalSeconds;
     }
+
+    public static int GetOggDurationInSeconds(MemoryStream oggStream)
+    {
+        oggStream.Position = 0; // Reset the memory stream position
+        using var vorbisReader = new VorbisWaveReader(oggStream);
+        return (int)vorbisReader.TotalTime.TotalSeconds;
+    }
+    
     public static async Task<MemoryStream> ConvertToOggAsync(byte[] audioData)
     {
         using var inputStream = new MemoryStream(audioData);
