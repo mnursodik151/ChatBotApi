@@ -45,7 +45,8 @@ public class TelegramMessageServiceV2 : ITelegramMessageService
 
     public async Task<TelegramSendResponseDto> SendVoiceAsync(TelegramSendVoiceRequestDto request)
     {
-        using var stream = new MemoryStream(request.VoiceData);
+        using var stream = new MemoryStream(request.VoiceData);   
+        request.Duration = AudioConversionUtils.GetWavDurationInSeconds(stream);
         var voice = new InputOnlineFile(stream, $"{request.VoiceName}.ogg");
 
         var sendVoiceRequest = new SendVoiceRequest(request.ChatId, voice)

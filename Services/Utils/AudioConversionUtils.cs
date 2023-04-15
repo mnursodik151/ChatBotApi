@@ -6,6 +6,12 @@ using NAudio.Vorbis;
 
 public static class AudioConversionUtils
 {
+    public static int GetWavDurationInSeconds(MemoryStream memoryStream)
+    {
+        memoryStream.Position = 0; // Reset the memory stream position
+        using var waveStream = new WaveFileReader(memoryStream);
+        return (int)waveStream.TotalTime.TotalSeconds;
+    }
     public static async Task<MemoryStream> ConvertToOggAsync(byte[] audioData)
     {
         using var inputStream = new MemoryStream(audioData);
