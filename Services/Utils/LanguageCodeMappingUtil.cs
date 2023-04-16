@@ -11,7 +11,7 @@ public static class LanguageCodeMappingUtil
         {"dan", "da-DK"},
         {"deu", "de-DE"},
         {"ell", "el-GR"},
-        {"eng", "en-GB"},
+        {"eng", "en-US"},
         {"spa", "es-ES"},
         {"fin", "fi-FI"},
         {"fil", "fil-PH"},

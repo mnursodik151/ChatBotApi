@@ -30,7 +30,7 @@ public class GCPTextToSpeechService : ITextToSpeechService
         // Build the voice request.
         var voiceSelection = new VoiceSelectionParams
         {
-            LanguageCode = "en-GB",
+            LanguageCode = "en-US",
             SsmlGender = SsmlVoiceGender.Male
         };
 
@@ -38,6 +38,7 @@ public class GCPTextToSpeechService : ITextToSpeechService
         if (detectedLanguage != null && LanguageCodeMappingUtil.Iso639_3ToGcp.TryGetValue(detectedLanguage.Iso639_3, out string? gcpLanguageCode))
         {
             voiceSelection.LanguageCode = gcpLanguageCode;
+            voiceSelection.SsmlGender = SsmlVoiceGender.Male;
         }
 
         // Select the type of audio file you want returned.
