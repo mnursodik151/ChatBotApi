@@ -20,6 +20,7 @@ builder.Services.AddScoped<ITextToSpeechService, GCPTextToSpeechService>();
 builder.Services.AddScoped<IOpenAiApiService, OpenAiApiService>();
 builder.Services.AddScoped<IObservable<CompletionResult>, OpenAiCompletionObservable>();
 builder.Services.AddSingleton<IObservable<TelegramSendMessageRequestDto>, OpenAiChatObservable>();
+builder.Services.AddSingleton<TextLanguageDetectionUtil>();
 
 var app = builder.Build();
 

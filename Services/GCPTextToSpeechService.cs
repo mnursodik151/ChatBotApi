@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 public class GCPTextToSpeechService : ITextToSpeechService
 {
     private readonly TextToSpeechClient _textToSpeechClient;
+    private readonly TextLanguageDetectionUtil _textLanguageDetectionUtil;
 
-    public GCPTextToSpeechService(IConfiguration configuration)
+    public GCPTextToSpeechService(IConfiguration configuration, TextLanguageDetectionUtil textLanguageDetectionUtil)
     {
         var credentialsFilePath = configuration["GCPCredentialPath"];
 
+        _textLanguageDetectionUtil = textLanguageDetectionUtil;
+
         var builder = new TextToSpeechClientBuilder();
         builder.CredentialsPath = credentialsFilePath;
-
         _textToSpeechClient = builder.Build();
     }
 
@@ -29,9 +31,14 @@ public class GCPTextToSpeechService : ITextToSpeechService
         var voiceSelection = new VoiceSelectionParams
         {
             LanguageCode = "en-GB",
-            Name = "en-GB-Standard-D",
             SsmlGender = SsmlVoiceGender.Male
         };
+
+        var detectedLanguage = _textLanguageDetectionUtil.DetectLanguageFromText(text);
+        if (detectedLanguage != null && LanguageCodeMappingUtil.Iso639_3ToGcp.TryGetValue(detectedLanguage.Iso639_3, out string? gcpLanguageCode))
+        {
+            voiceSelection.LanguageCode = gcpLanguageCode;
+        }
 
         // Select the type of audio file you want returned.
         var audioConfig = new AudioConfig

@@ -71,11 +71,10 @@ namespace ChatBotApi.Controllers
             }
         }
 
-        [HttpGet("download-audio")]
-        public async Task<IActionResult> DownloadAudio()
+        [HttpPost("download-audio")]
+        public async Task<IActionResult> DownloadAudio([FromBody] string text)
         {
-            var text = "Hello world!";
-            var audioStream = await _textToSpeechService.GenerateAudioByteAsync(text);
+            var audioStream = new MemoryStream(await _textToSpeechService.GenerateAudioByteAsync(text));
 
             // Set the content type and headers for the response.
             HttpContext.Response.ContentType = "audio/mpeg";
