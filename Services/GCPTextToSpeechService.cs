@@ -1,6 +1,7 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.TextToSpeech.V1;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 public class GCPTextToSpeechService : ITextToSpeechService
@@ -35,9 +36,11 @@ public class GCPTextToSpeechService : ITextToSpeechService
         };
 
         var detectedLanguage = _textLanguageDetectionUtil.DetectLanguageFromText(text);
-        if (detectedLanguage != null && LanguageCodeMappingUtil.Iso639_3ToGcp.TryGetValue(detectedLanguage.Iso639_3, out string? gcpLanguageCode))
+        if (detectedLanguage != null && LanguageCodeMappingUtil.Iso639_1ToGcp.TryGetValue(detectedLanguage.Iso639_3, out string? gcpLanguageCode))
         {
             voiceSelection.LanguageCode = gcpLanguageCode;
+            var voiceType = Regex.IsMatch(detectedLanguage.Iso639_3, "^(ko|ja|it)$") ? "C" : "B";
+            voiceSelection.Name = $"{gcpLanguageCode}-Standard-{voiceType}";
             voiceSelection.SsmlGender = SsmlVoiceGender.Male;
         }
 
