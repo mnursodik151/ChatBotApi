@@ -31,7 +31,7 @@ public class GCPTextToSpeechService : ITextToSpeechService
         // Build the voice request.
         var voiceSelection = new VoiceSelectionParams
         {
-            LanguageCode = "en-US",
+            LanguageCode = "en-GB",
             SsmlGender = SsmlVoiceGender.Male
         };
 

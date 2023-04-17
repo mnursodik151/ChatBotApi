@@ -57,7 +57,7 @@ public static class LanguageCodeMappingUtil
     {"da", "da-DK"},
     {"de", "de-DE"},
     {"el", "el-GR"},
-    {"en", "en-US"},
+    {"en", "en-GB"},
     {"es", "es-ES"},
     {"fi", "fi-FI"},
     {"fil", "fil-PH"},
