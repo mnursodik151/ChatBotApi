@@ -25,7 +25,7 @@ public class GCPTextToSpeechService : ITextToSpeechService
         // Set the text input to be synthesized.
         var input = new SynthesisInput
         {
-            Ssml = text.Replace("\"", "\\\"")
+            Ssml = text
         };
 
         // Build the voice request.
